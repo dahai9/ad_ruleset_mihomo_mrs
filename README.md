@@ -1,13 +1,19 @@
 # ruleset 规则集文件说明
 本项目主要将[ios_rule_script/Clash广告部分](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash)转化为mrs以减小内存开销 
-由于数据结构限制，部分无法完全转化，为达到最好效果建议添加
+
+由于数据结构限制，domain-keyword无法完全转化，为达到最好效果建议如示例添加
+
 
 ## 1. 文件类型
 ① Clash ruleset 规则集文件，格式为 `.mrs`（`format: mrs`）  
 ## 2. 数据源
 `rule-set,Advertising,🛑 广告拦截` 源采用 [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Advertising)  
+
 `rule-set,AdGuardSDNSFilter,🛑 广告拦截` 源采用 [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/AdGuardSDNSFilter)
+
 `rule-set,EasyPrivacy,🛑 广告拦截` 源采用 [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/EasyPrivacy)
+
+https://github.com/dahai9/ad_ruleset_mihomo_mrs/releases/download/clash-ruleset/Advertising.mrs
 https://github.com/dahai9/ad_ruleset_mihomo_mrs/releases/download/clash-ruleset/EasyPrivacy.mrs
 https://github.com/dahai9/ad_ruleset_mihomo_mrs/releases/download/clash-ruleset/AdGuardSDNSFilter.mrs
 ## 3. 文件使用
@@ -24,20 +30,12 @@ proxy-groups:
   - {name: 🛑 广告拦截, type: select, proxies: [REJECT]}
 
 rule-providers:
-  fakeip-filter:
+  Advertising_c:
     type: http
-    behavior: domain
+    behavior: classical
     format: mrs
     path: ./rules/fakeip-filter.mrs
     url: "https://github.com/DustinWin/ruleset_geodata/releases/download/clash-ruleset/fakeip-filter.mrs"
-    interval: 86400
-
-  applications:
-    type: http
-    behavior: classical
-    format: text
-    path: ./rules/applications.list
-    url: "https://github.com/DustinWin/ruleset_geodata/releases/download/clash-ruleset/applications.list"
     interval: 86400
 
   Advertising:
