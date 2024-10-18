@@ -36,10 +36,10 @@ jobs:
           awk 'NF {last=$0} {lines[NR]=$0} END {print last; for (i=1; i<=NR-1; i++) print lines[i]}' tmp > merged_unique.yaml
           head merged_unique.yaml
           echo "-------------------------------------------------"
-          mv tmp Advertising.yaml
+          mv tmp ./tools/domains/Advertising/Advertising.yaml
           mv ./tools/domains/Advertising/anti-ad-clash.yaml ./tools/domains/Advertising/Advertising.yaml
           mv merged_unique.yaml ./tools/domains/Advertising/Advertising.yaml
-          head Advertising.yaml
+          head ./tools/domains/Advertising/Advertising.yaml
           echo "-------------------------------------------------"
           ls ./tools/domains/Advertising/
           
