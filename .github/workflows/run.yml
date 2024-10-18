@@ -21,74 +21,18 @@ jobs:
         shell: bash
       - name: Generate `clash` rule-set
         run: |
-          mkdir -p ./clash-ruleset/ ./sing-box-ruleset/ ./sing-box-ruleset-compatible/
-          domains=(private ads microsoft-cn apple-cn google-cn games-cn ai netflix disney max primevideo appletv youtube tiktok bilibili proxy cn)
-          archs=(applications networktest)
-          ips=(netflixip telegramip privateip cnip)
-
-          # Generate `clash` rule-set (yaml)
-          for ((i = 0; i < 17; i++)); do
-            echo 'payload:' > "./clash-ruleset/${domains[i]}.yaml"
-            curl -sSL "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e "s/^DOMAIN,/  - '/" -e "s/^DOMAIN-SUFFIX,/  - '+\./" -e "s/$/'/" >> "./clash-ruleset/${domains[i]}.yaml"
-          done
-          echo 'payload:' > "./clash-ruleset/fakeip-filter.yaml"
-          curl -sSL "${domains_download_url}/fakeip-filter.list" | sed -e "s/^DOMAIN,/  - '/" -e "s/^DOMAIN-SUFFIX,/  - '+\./" -e "s/^DOMAIN-REGEX,/  - '/" -e "s/'\./'/" -e "s/$/'/" >> ./clash-ruleset/fakeip-filter.yaml
-
-          for ((i = 0; i < 2; i++)); do
-            echo 'payload:' > "./clash-ruleset/${archs[i]}.yaml"
-            curl -sSL "${domains_download_url}/${archs[i]}.list" | sed 's/^/  - /' >> "./clash-ruleset/${archs[i]}.yaml"
-          done
-
-          for ((i = 0; i < 4; i++)); do
-            echo 'payload:' > "./clash-ruleset/${ips[i]}.yaml"
-            curl -sSL "${ips_download_url}/${ips[i]}.list" | grep 'IP-CIDR' | sed -e "s/^IP-CIDR,/  - '/" -e "s/^IP-CIDR6,/  - '/" -e "s/$/'/" >> "./clash-ruleset/${ips[i]}.yaml"
-          done
-
-          # Generate `clash` rule-set (text)
-          for ((i = 0; i < 17; i++)); do
-            curl -sSL "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' > "./clash-ruleset/${domains[i]}.list"
-          done
-          curl -sSL "${domains_download_url}/fakeip-filter.list" | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' -e 's/^DOMAIN-REGEX,//' -e 's/^\.//' > ./clash-ruleset/fakeip-filter.list
-
-          for ((i = 0; i < 2; i++)); do
-            curl -sSL "${domains_download_url}/${archs[i]}.list"  > "./clash-ruleset/${archs[i]}.list"
-          done
-
-          for ((i = 0; i < 4; i++)); do
-            curl -sSL "${ips_download_url}/${ips[i]}.list" | grep 'IP-CIDR' | sed -e 's/^IP-CIDR,//' -e 's/^IP-CIDR6,//' > "./clash-ruleset/${ips[i]}.list"
-          done
-
+          mkdir -p ./clash-ruleset/ 
+          domains=(Advertising EasyPrivacy AdGuardSDNSFilter)
+          https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Clash/Advertising/Advertising_Domain.yaml
+          https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/EasyPrivacy/EasyPrivacy_Domain.yaml
+          https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Clash/AdGuardSDNSFilter/AdGuardSDNSFilter_Domain.yaml
+          
+          
           # Ready for generate `clash` rule-set (mrs)
-          for ((i = 0; i < 17; i++)); do
+          for ((i = 0; i < 5; i++)); do
             mkdir -p "./tools/domains/${domains[i]}/"
-            curl "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' > "./tools/domains/${domains[i]}/${domains[i]}.list"
+            curl "${domains_download_url}/${domains[i]}/${domains[i]}_Dmain.yaml"  > "./tools/domains/${domains[i]}/${domains[i]}.yaml"
           done
-          mkdir -p "./tools/domains/fakeip-filter/"
-          curl -sSL "${domains_download_url}/fakeip-filter.list" | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' -e 's/^DOMAIN-REGEX,//' -e 's/^\.//' > ./tools/domains/fakeip-filter/fakeip-filter.list
-
-          for ((i = 0; i < 4; i++)); do
-            mkdir -p "./tools/ips/${ips[i]}/"
-            curl -sSL "${ips_download_url}/${ips[i]}.list"| grep 'IP-CIDR' | sed -e 's/^IP-CIDR,//' -e 's/^IP-CIDR6,//' > "./tools/ips/${ips[i]}/${ips[i]}.list"
-          done
-
-          # Ready for generate `sing-box` rule_set
-          for ((i = 0; i < 17; i++)); do
-            mkdir -p "./tools/rules/${domains[i]}/"
-            curl "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,|DOMAIN-KEYWORD' > "./tools/rules/${domains[i]}/${domains[i]}.yaml"
-          done
-          mkdir -p "./tools/rules/fakeip-filter/"
-          curl "${domains_download_url}/fakeip-filter.list" > "./tools/rules/fakeip-filter/fakeip-filter.yaml"
-
-          for ((i = 0; i < 2; i++)); do
-            mkdir -p "./tools/rules/${archs[i]}/"
-            curl "${domains_download_url}/${archs[i]}.list" > "./tools/rules/${archs[i]}/${archs[i]}.yaml"
-          done
-
-          for ((i = 0; i < 4; i++)); do
-            mkdir -p "./tools/rules/${ips[i]}/"
-            curl -sSL "${ips_download_url}/${ips[i]}.list"| grep 'IP-CIDR' > "./tools/rules/${ips[i]}/${ips[i]}.yaml"
-          done
-
       - name: Download and unzip `mihomo` core
         run: |
           wget https://github.com/DustinWin/clash_singbox-tools/releases/download/mihomo/mihomo-alpha-linux-amd64.tar.gz -O - | tar -zxf - -C ./tools/
@@ -100,61 +44,8 @@ jobs:
           chmod +x ./mihomo
           list=($(ls ./domains/))
           for ((i = 0; i < ${#list[@]}; i++)); do
-            ./mihomo convert-ruleset domain text "./domains/${list[i]}/${list[i]}.list" ../clash-ruleset/${list[i]}.mrs
+            ./mihomo convert-ruleset domain text "./domains/${list[i]}/${list[i]}.yaml" ../clash-ruleset/${list[i]}.mrs
           done
-
-          list=($(ls ./ips/))
-          for ((i = 0; i < ${#list[@]}; i++)); do
-            ./mihomo convert-ruleset ipcidr text "./ips/${list[i]}/${list[i]}.list" ../clash-ruleset/${list[i]}.mrs
-          done
-          rm -rf ./mihomo* ./domains/ ./ips/
-
-      - name: Download and unzip `sing-box` core
-        run: |
-          wget https://github.com/DustinWin/clash_singbox-tools/releases/download/sing-box/sing-box-dev-linux-amd64v3.tar.gz -O - | tar -zxf - -C ./tools/
-          mv -f ./tools/CrashCore ./tools/sing-box
-
-      - name: Generate `sing-box` rule_set
-        run: |
-          cd ./tools/
-          chmod +x ./convert.sh && ./convert.sh
-          rm -rf ./sing-box*
-          mv -f ./*.json ./*.srs ../sing-box-ruleset/
-
-      - name: Download and unzip `sing-box` core(compatible)
-        run: |
-          wget https://github.com/DustinWin/clash_singbox-tools/releases/download/sing-box/sing-box-release-linux-amd64v3.tar.gz -O - | tar -zxf - -C ./tools/
-          mv -f ./tools/CrashCore ./tools/sing-box
-
-      - name: Generate `sing-box` rule_set(compatible)
-        run: |
-          cd ./tools/
-          chmod +x ./convert_compatible.sh && ./convert_compatible.sh
-          rm -rf ./sing-box* ./rules*
-          mv -f ./*.json ./*.srs ../sing-box-ruleset-compatible/
-
-      - name: Release and upload `clash` assets
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: clash
-          tag: clash
-          overwrite: true
-          body: "[Clash](https://github.com/Dreamacro/clash) 规则集文件（包含 .dat、.mmdb 和 .metadb 文件）"
-          file_glob: true
-          file: ./clash/*
-
-      - name: Git push assets to "clash" branch
-        run: |
-          cd ./clash/ || exit 1
-          git init
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b clash
-          git add .
-          git commit -m "Clash ruleset_geodata 文件更新于 ${update_version}"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin clash
 
       - name: Release and upload `clash-ruleset` assets
         uses: svenstaro/upload-release-action@v2
@@ -178,95 +69,6 @@ jobs:
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git push -f -u origin clash-ruleset
 
-      - name: Release and upload `sing-box` assets
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: sing-box
-          tag: sing-box
-          overwrite: true
-          body: "[sing-box](https://github.com/SagerNet/sing-box) 规则集文件（包含 .db 文件）"
-          file_glob: true
-          file: ./sing-box/*
-
-      - name: Git push assets to "sing-box" branch
-        run: |
-          cd ./sing-box/ || exit 1
-          git init
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b sing-box
-          git add .
-          git commit -m "sing-box ruleset_geodata 文件更新于 ${update_version}"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin sing-box
-
-      - name: Release and upload `sing-box-ruleset` assets
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: sing-box-ruleset
-          tag: sing-box-ruleset
-          overwrite: true
-          body: "sing-box ruleset 规则集文件，包含 .srs 和 .json 格式"
-          file_glob: true
-          file: ./sing-box-ruleset/*
-
-      - name: Commit and push `sing-box-ruleset` branch
-        run: |
-          cd ./sing-box-ruleset/ || exit 1
-          git init
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git checkout -b sing-box-ruleset
-          git add . && git commit -m "sing-box rule_set 规则集文件更新于 ${update_version}"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin sing-box-ruleset
-
-      - name: Release and upload `sing-box-ruleset-compatible` assets
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: sing-box-ruleset-compatible
-          tag: sing-box-ruleset-compatible
-          overwrite: true
-          body: "sing-box ruleset 规则集文件，包含 .srs 和 .json 格式"
-          file_glob: true
-          file: ./sing-box-ruleset-compatible/*
-
-      - name: Commit and push `sing-box-ruleset-compatible` branch
-        run: |
-          cd ./sing-box-ruleset-compatible/ || exit 1
-          git init
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git checkout -b sing-box-ruleset-compatible
-          git add . && git commit -m "sing-box rule_set 规则集文件更新于 ${update_version}"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin sing-box-ruleset-compatible
-
-      - name: Purge jsDelivr CDN
-        run: |
-          cd ./clash/ || exit 1
-          for file in $(ls); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@clash/${file}"
-          done
-          cd ../sing-box/ || exit 1
-          for file in $(ls); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@sing-box/${file}"
-          done
-          cd ../clash-ruleset/ || exit 1
-          for file in $(ls); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@clash-ruleset/${file}"
-          done
-          cd ../sing-box-ruleset/ || exit 1
-          for file in $(ls); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@sing-box-ruleset/${file}"
-          done
-          cd ../sing-box-ruleset-compatible/ || exit 1
-          for file in $(ls); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@sing-box-ruleset-compatible/${file}"
-          done
 
       - name: Delete old workflow runs
         uses: Mattraks/delete-workflow-runs@v2
