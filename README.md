@@ -33,9 +33,9 @@ rule-providers:
   Advertising_c:
     type: http
     behavior: classical
-    format: mrs
-    path: ./rules/fakeip-filter.mrs
-    url: "https://github.com/DustinWin/ruleset_geodata/releases/download/clash-ruleset/fakeip-filter.mrs"
+    format: yaml
+    path: ./rules/Advertising.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising.yaml"
     interval: 86400
 
   Advertising:
@@ -63,6 +63,7 @@ rule-providers:
     interval: 86400
 
 rules:
+  - RULE-SET,Advertising_c,🛑 广告拦截
   - RULE-SET,Advertising,🛑 广告拦截
   - RULE-SET,AdGuardSDNSFilter,🛑 广告拦截
   - RULE-SET,EasyPrivacy,🛑 广告拦截
