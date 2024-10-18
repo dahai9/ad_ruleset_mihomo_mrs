@@ -1,8 +1,9 @@
-# 二、 ruleset 规则集文件说明
+# ruleset 规则集文件说明
+本项目主要将[ios_rule_script/Clash广告部分](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash)转化为mrs以减小内存开销 
 ## 1. 文件类型
 ① Clash ruleset 规则集文件，格式为 `.mrs`（`format: mrs`）  
 ## 2. 数据源
-`rule-set,ads,🛑 广告拦截` 源采用 [privacy-protection-tools/anti-AD](https://github.com/privacy-protection-tools/anti-AD)  
+`rule-set,ads,🛑 广告拦截` 源采用 [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Advertising)  
 
 ## 3. 文件使用
 <details>
