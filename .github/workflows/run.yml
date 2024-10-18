@@ -27,8 +27,8 @@ jobs:
           # Ready for generate `clash` rule-set (mrs)
           for ((i = 0; i < 5; i++)); do
             mkdir -p "./tools/domains/${domains[i]}/"
-            echo "${domains_download_url}/${domains[i]}/${domains[i]}_Domain.yaml"
-            curl "${domains_download_url}/${domains[i]}/${domains[i]}_Domain.yaml"  > "./tools/domains/${domains[i]}/${domains[i]}.yaml"
+            echo "${domains_download_url}/${domains[i]}/${domains[i]}_Domain."
+            curl "${domains_download_url}/${domains[i]}/${domains[i]}_Domain.txt"  > "./tools/domains/${domains[i]}/${domains[i]}.txt"
           done
       - name: Download and unzip `mihomo` core
         run: |
@@ -41,7 +41,7 @@ jobs:
           chmod +x ./mihomo
           list=($(ls ./domains/))
           for ((i = 0; i < ${#list[@]}; i++)); do
-            ./mihomo convert-ruleset domain text "./domains/${list[i]}/${list[i]}.yaml" ../clash-ruleset/${list[i]}.mrs
+            ./mihomo convert-ruleset domain text "./domains/${list[i]}/${list[i]}.txt" ../clash-ruleset/${list[i]}.mrs
           done
 
       - name: Release and upload `clash-ruleset` assets
