@@ -37,8 +37,8 @@ jobs:
           head merged_unique.yaml
           echo "-------------------------------------------------"
           mv tmp Advertising.yaml
-          mv anti-ad-clash.yaml Advertising.yaml
-          mv merged_unique.yaml Advertising.yaml
+          mv ./tools/domains/Advertising/anti-ad-clash.yaml ./tools/domains/Advertising/Advertising.yaml
+          mv merged_unique.yaml ./tools/domains/Advertising/Advertising.yaml
           head Advertising.yaml
           echo "-------------------------------------------------"
           ls ./tools/domains/Advertising/
