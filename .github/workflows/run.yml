@@ -27,8 +27,8 @@ jobs:
           # Ready for generate `clash` rule-set (mrs)
           for ((i = 0; i < 5; i++)); do
             mkdir -p "./tools/domains/${domains[i]}/"
-            echo "${domains_download_url}/${domains[i]}/${domains[i]}_Dmain.yaml"
-            curl "${domains_download_url}/${domains[i]}/${domains[i]}_Dmain.yaml"  > "./tools/domains/${domains[i]}/${domains[i]}.yaml"
+            echo "${domains_download_url}/${domains[i]}/${domains[i]}_Domain.yaml"
+            curl "${domains_download_url}/${domains[i]}/${domains[i]}_Domain.yaml"  > "./tools/domains/${domains[i]}/${domains[i]}.yaml"
           done
       - name: Download and unzip `mihomo` core
         run: |
