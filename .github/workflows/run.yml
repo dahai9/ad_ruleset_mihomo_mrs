@@ -25,11 +25,24 @@ jobs:
           domains=(Advertising EasyPrivacy AdGuardSDNSFilter)
           
           # Ready for generate `clash` rule-set (mrs)
-          for ((i = 0; i < 5; i++)); do
+          for ((i = 0; i < 4; i++)); do
             mkdir -p "./tools/domains/${domains[i]}/"
             echo "${domains_download_url}/${domains[i]}/${domains[i]}_Domain."
             curl "${domains_download_url}/${domains[i]}/${domains[i]}_Domain.yaml"  > "./tools/domains/${domains[i]}/${domains[i]}.yaml"
           done
+          curl "https://github.com/privacy-protection-tools/anti-AD/raw/refs/heads/master/anti-ad-clash.yaml" > "./tools/domains/Advertising/anti-ad-clash.yaml"
+          cat ./tools/domains/Advertising/anti-ad-clash.yaml ./tools/domains/Advertising/Advertising.yaml | sort | uniq > merged_unique.yaml
+          awk 'NR==1{last=$0; next} {print} END{print last}' merged_unique.yaml > tmp
+          awk 'NF {last=$0} {lines[NR]=$0} END {print last; for (i=1; i<=NR-1; i++) print lines[i]}' tmp > merged_unique.yaml
+          head merged_unique.yaml
+          echo "-------------------------------------------------"
+          mv tmp Advertising.yaml
+          mv anti-ad-clash.yaml Advertising.yaml
+          mv merged_unique.yaml Advertising.yaml
+          head Advertising.yaml
+          echo "-------------------------------------------------"
+          ls ./tools/domains/Advertising/
+          
       - name: Download and unzip `mihomo` core
         run: |
           wget https://github.com/DustinWin/clash_singbox-tools/releases/download/mihomo/mihomo-alpha-linux-amd64.tar.gz -O - | tar -zxf - -C ./tools/
